@@ -1,5 +1,10 @@
 # 💫 About Me:
-🎯 Currently diving deep into DSA & contributing to Open-Source projects.<br><br>🤝 Eager to collaborate on:<br><br>   * Web Development Projects<br>   *Hackathon Innovations<br><br>🌱 Actively mastering: DSA & React Framework<br>💬 Talk to me about: Crafting robust, scalable web applications<br>⚡ Fun fact: I'm a hackathon enthusiast who loves turning ideas into impactful solutions!<br>
+🎯 Currently diving deep into DSA & contributing to Open-Source projects.<br><br>🤝 
+Eager to collaborate on:<br><br>   
+* Web Development Projects<br> 
+* Hackathon Innovations<br><br>🌱
+* Actively mastering: DSA & React Framework<br>💬 Talk to me about: Crafting robust, scalable web applications<br>
+⚡ Fun fact: I'm a hackathon enthusiast who loves turning ideas into impactful solutions!<br>
 
 
 ## 🌐 Socials:
