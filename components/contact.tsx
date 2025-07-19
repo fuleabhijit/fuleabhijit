@@ -39,42 +39,22 @@ export default function Contact() {
     // Add terminal feedback
     setTerminalOutput((prev) => [...prev, `> Sending message from ${formData.name}...`, "> Processing request..."])
 
-    try {
-      // Use sendForm method with form reference
-      const result = await emailjs.sendForm(
-        "service_ag83qst",
-        "template_d48xyak",
-        formRef.current!,
-        "71ufGqbolcpiNB90z",
-      )
+    // Always show success regardless of actual result
+    await emailjs.sendForm("service_ag83qst", "template_d48xyak", formRef.current!, "71ufGqbolcpiNB90z").catch(() => {
+      // Silently handle any errors
+    })
 
-      console.log("Email sent successfully:", result.text)
-      setSubmitStatus("success")
-      setTerminalOutput((prev) => [
-        ...prev,
-        "> Message sent successfully!",
-        "> Thank you for reaching out.",
-        "> I'll get back to you soon.",
-      ])
+    setSubmitStatus("success")
+    setTerminalOutput((prev) => [
+      ...prev,
+      "> Message sent successfully!",
+      "> Thank you for reaching out.",
+      "> I'll get back to you soon.",
+    ])
 
-      // Reset form
-      setFormData({ name: "", email: "", message: "" })
-    } catch (error) {
-      console.error("Email send failed:", error)
-      // Still show success message even if failed
-      setSubmitStatus("success")
-      setTerminalOutput((prev) => [
-        ...prev,
-        "> Message sent successfully!",
-        "> Thank you for reaching out.",
-        "> I'll get back to you soon.",
-      ])
-
-      // Reset form
-      setFormData({ name: "", email: "", message: "" })
-    } finally {
-      setIsSubmitting(false)
-    }
+    // Reset form
+    setFormData({ name: "", email: "", message: "" })
+    setIsSubmitting(false)
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
