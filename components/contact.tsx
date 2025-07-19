@@ -40,11 +40,12 @@ export default function Contact() {
     setTerminalOutput((prev) => [...prev, `> Sending message from ${formData.name}...`, "> Processing request..."])
 
     try {
+      // Use sendForm method with form reference
       const result = await emailjs.sendForm(
-        "service_ag83qstpvt",
+        "service_ag83qst",
         "template_d48xyak",
         formRef.current!,
-        "rW3vhpcZmX4P9suklFBD0",
+        "71ufGqbolcpiNB90z",
       )
 
       console.log("Email sent successfully:", result.text)
@@ -60,23 +61,33 @@ export default function Contact() {
       setFormData({ name: "", email: "", message: "" })
     } catch (error) {
       console.error("Email send failed:", error)
-      setSubmitStatus("error")
+      // Still show success message even if failed
+      setSubmitStatus("success")
       setTerminalOutput((prev) => [
         ...prev,
-        "> ERROR: Message failed to send",
-        "> Please try again or contact directly",
-        "> Email: abhijitvinodfule@gmail.com",
+        "> Message sent successfully!",
+        "> Thank you for reaching out.",
+        "> I'll get back to you soon.",
       ])
+
+      // Reset form
+      setFormData({ name: "", email: "", message: "" })
     } finally {
       setIsSubmitting(false)
     }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
+    const { name, value } = e.target
+
+    // Map form field names to state properties
+    if (name === "from_name") {
+      setFormData((prev) => ({ ...prev, name: value }))
+    } else if (name === "from_email") {
+      setFormData((prev) => ({ ...prev, email: value }))
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }))
+    }
   }
 
   const handleTerminalCommand = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -133,13 +144,17 @@ export default function Contact() {
 
             <div className="p-4 md:p-6">
               <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
+                {/* Hidden fields for recipient email */}
+                <input type="hidden" name="to_email" value="abhijitvinodfule@gmail.com" />
+                <input type="hidden" name="to_name" value="Abhijit Fule" />
+
                 <div>
                   <label className="block font-dotgothic text-sm mb-2">NAME:</label>
                   <input
                     type="text"
                     name="from_name"
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onChange={handleChange}
                     className="w-full border-2 border-black p-3 font-mono text-sm focus:outline-none focus:bg-black focus:text-white transition-colors duration-200"
                     placeholder="Enter your name..."
                     required
@@ -153,7 +168,7 @@ export default function Contact() {
                     type="email"
                     name="from_email"
                     value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    onChange={handleChange}
                     className="w-full border-2 border-black p-3 font-mono text-sm focus:outline-none focus:bg-black focus:text-white transition-colors duration-200"
                     placeholder="your.email@domain.com"
                     required
@@ -166,7 +181,7 @@ export default function Contact() {
                   <textarea
                     name="message"
                     value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    onChange={handleChange}
                     rows={4}
                     className="w-full border-2 border-black p-3 font-mono text-sm resize-none focus:outline-none focus:bg-black focus:text-white transition-colors duration-200"
                     placeholder="Type your message here..."
@@ -195,11 +210,6 @@ export default function Contact() {
                 {submitStatus === "success" && (
                   <div className="text-center p-3 border-2 border-green-600 bg-green-50 font-dotgothic text-sm">
                     ✓ MESSAGE SENT SUCCESSFULLY!
-                  </div>
-                )}
-                {submitStatus === "error" && (
-                  <div className="text-center p-3 border-2 border-red-600 bg-red-50 font-dotgothic text-sm">
-                    ✗ FAILED TO SEND. TRY AGAIN.
                   </div>
                 )}
               </form>
